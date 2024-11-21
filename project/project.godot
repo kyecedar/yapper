@@ -1,0 +1,31 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="yapper"
+run/main_scene="res://scenes/Demo.tscn"
+config/features=PackedStringArray("4.3", "Mobile")
+config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/yapper/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "pink",
+"res://scenes/": "orange"
+}
+
+[rendering]
+
+renderer/rendering_method="mobile"

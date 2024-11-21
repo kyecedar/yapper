@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwd0g7win7x10"]
+
+[ext_resource type="Script" path="res://addons/yapper/Yapper.gd" id="1_7cxl6"]
+
+[node name="Demo" type="Node3D"]
+
+[node name="Yapper" type="Node3D" parent="."]
+script = ExtResource("1_7cxl6")
+text = "yaarg."
