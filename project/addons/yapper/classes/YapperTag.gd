@@ -1,8 +1,8 @@
 extends Node
-class_name YapperItem
+class_name YapperTag
 
 ## Mostly ported from RichTextLabel. Not all work yet.
-enum YapperItemType {
+enum YapperTagType {
 	TEXT,
 	BOLD_OPEN,
 	BOLD_CLOSE,
@@ -80,6 +80,15 @@ enum YapperItemType {
 	SHY, ## Soft hyphen.
 }
 
-var type : YapperItemType
+var type : YapperTagType
 var content : String = ""
-var options : YapperItemOptions = null
+var options : YapperTagOptions = null
+
+
+
+static var regex_bold := RegEx.new()
+
+
+
+static func tag_format(text: String) -> YapperTag:
+	return null

@@ -1,5 +1,5 @@
-extends YapperItemOptions
-class_name YapperItemImageOptions
+extends YapperTagOptions
+class_name YapperTagImageOptions
 
 
 

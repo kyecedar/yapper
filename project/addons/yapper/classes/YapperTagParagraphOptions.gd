@@ -1,16 +1,16 @@
-extends YapperItemOptions
-class_name YapperItemParagraphOptions
+extends YapperTagOptions
+class_name YapperTagParagraphOptions
 
 
 
-enum YapperItemOptionAlignment {
+enum YapperTagOptionAlignment {
 	LEFT,
 	CENTER,
 	RIGHT,
 	FILL,
 }
 
-enum YapperItemOptionBiDiOverride {
+enum YapperTagOptionBiDiOverride {
 	DEFAULT,
 	URI,
 	FILE,
@@ -20,7 +20,7 @@ enum YapperItemOptionBiDiOverride {
 	CUSTOM,
 }
 
-enum YapperItemOptionJustificationFlags {
+enum YapperTagOptionJustificationFlags {
 	KASHIDA,
 	WORD,
 	TRIM,
@@ -30,13 +30,13 @@ enum YapperItemOptionJustificationFlags {
 	DO_NOT_SKIP_SINGLE,
 }
 
-enum YapperItemOptionDirection {
+enum YapperTagOptionDirection {
 	LTR,
 	RTL,
 	AUTO,
 }
 
-enum YapperItemOptionLanguage {
+enum YapperTagOptionLanguage {
 	AA, AB, ACE, ACH, ADA, ADY, AE, AEB, AF, AFH, AGQ, AIN, AGR, AK, AKK, AKZ, ALE, ALN, ALT, AM, AN,
 	ANG, ANP, AR, ARC, ARN, ARO, ARP, ARQ, ARS, ARW, ARY, ARZ, AS, ASA, ASE, AST, AV, AVK, AWA, AYC,
 	AY, AZ, BA, BAL, BAN, BAR, BAS, BAX, BBC, BBJ, BE, BEJ, BEM, BER, BEW, BEZ, BFD, BFQ, BG, BHB, BGN,
@@ -71,13 +71,13 @@ enum YapperItemOptionLanguage {
 
 
 
-var align : YapperItemOptionAlignment = YapperItemOptionAlignment.LEFT
-var bidi_override : YapperItemOptionBiDiOverride = YapperItemOptionBiDiOverride.DEFAULT
-var justification_flags : Array[YapperItemOptionJustificationFlags] = [
-	YapperItemOptionJustificationFlags.WORD,
-	YapperItemOptionJustificationFlags.KASHIDA,
-	YapperItemOptionJustificationFlags.SKIP_LAST,
-	YapperItemOptionJustificationFlags.DO_NOT_SKIP_SINGLE ]
-var direction : YapperItemOptionDirection # TODO : set inherited
-var language : YapperItemOptionLanguage # TODO : set inherited or default game language
+var align : YapperTagOptionAlignment = YapperTagOptionAlignment.LEFT
+var bidi_override : YapperTagOptionBiDiOverride = YapperTagOptionBiDiOverride.DEFAULT
+var justification_flags : Array[YapperTagOptionJustificationFlags] = [
+	YapperTagOptionJustificationFlags.WORD,
+	YapperTagOptionJustificationFlags.KASHIDA,
+	YapperTagOptionJustificationFlags.SKIP_LAST,
+	YapperTagOptionJustificationFlags.DO_NOT_SKIP_SINGLE ]
+var direction : YapperTagOptionDirection # TODO : set inherited
+var language : YapperTagOptionLanguage # TODO : set inherited or default game language
 var tab_stops : float = NAN # TODO : default to "Width of the space character in the font.
