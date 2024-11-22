@@ -3,6 +3,19 @@ extends Node3D
 
 
 
+# TODO list :
+# [ ] fix spacing between characters. maybe custom kerning list,
+#     or compile spacing between all common characters in font before-hand
+#     and when new character combos show up, calculate and cache those real time?
+#      ^ seems a bit convoluted.
+#      ( can also custom render fonts :3c owie that's a lot of work... )
+#
+#     https://github.com/godotengine/godot/blob/master/scene/3d/visual_instance_3d.h
+#     https://github.com/godotengine/godot/blob/master/scene/3d/label_3d.h
+#     https://github.com/godotengine/godot/blob/master/scene/gui/rich_text_label.h
+
+
+
 @export_multiline var text : String = "" : set = _set_text
 
 @export var enable_formatting : bool = false
@@ -53,10 +66,16 @@ func _enter_tree() -> void:
 	format()
 	print(formatted)
 	
-	#for child in get_children(true):
-		#print(child.name)
+	call_deferred("calculate_width")
 
-
+func calculate_width() -> void:
+	var width : float = 0.0
+	
+	for child in chars.get_children():
+		child.position.x += width
+		width += child.get_aabb().size.x
+	
+	print(width)
 
 ## Try to run as little as possible.
 func format() -> void:
@@ -153,6 +172,7 @@ func create_characters() -> void:
 		
 		for i in tag.content:
 			var label = Label3D.new()
+			label.name = StringName(str(chars.get_child_count()))
 			label.text = i
 			chars.add_child(label)
 
