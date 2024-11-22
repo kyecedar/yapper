@@ -21,6 +21,8 @@ enum YapperTagType {
 	CENTER_CLOSE,
 	LEFT_OPEN,
 	LEFT_CLOSE,
+	RIGHT_OPEN,
+	RIGHT_CLOSE,
 	FILL_OPEN,
 	FILL_CLOSE,
 	INDENT_OPEN,
@@ -86,9 +88,98 @@ var options : YapperTagOptions = null
 
 
 
-static var regex_bold := RegEx.new()
+static var obold_pattern := "[b]"
+static var cbold_pattern := "[/b]"
+static var oitalic_pattern := "[i]"
+static var citalic_pattern := "[/i]"
+static var ounderline_pattern := "[u]"
+static var cunderline_pattern := "[/u]"
+static var ostrikethrough_pattern := "[s]"
+static var cstrikethrough_pattern := "[/s]"
+static var ocode_pattern := "[code]"
+static var ccode_pattern := "[/code]"
+static var ocenter_pattern := "[center]"
+static var ccenter_pattern := "[/center]"
+static var oleft_pattern := "[left]"
+static var cleft_pattern := "[/left]"
+static var oright_pattern := "[right]"
+static var cright_pattern := "[/right]"
+static var ofill_pattern := "[fill]"
+static var cfill_pattern := "[/fill]"
+static var oindent_pattern := "[indent]"
+static var cindent_pattern := "[/indent]"
+
+static var lrm_pattern := "[lrm]"
+static var rlm_pattern := "[rlm]"
+static var lre_pattern := "[lre]"
+static var rle_pattern := "[rle]"
+static var lro_pattern := "[lro]"
+static var rlo_pattern := "[rlo]"
+static var pdf_pattern := "[pdf]"
+static var alm_pattern := "[alm]"
+static var lri_pattern := "[lri]"
+static var rli_pattern := "[rli]"
+static var fsi_pattern := "[fsi]"
+static var pdi_pattern := "[pdi]"
+static var zwnj_pattern := "[zwnj]"
+static var wj_pattern := "[wj]"
+static var shy_pattern := "[shy]"
+
+static var regex_paragraph := RegEx.new()
+static var regex_paragraph_pattern := ""
+static var cparagraph_pattern := "[/p]"
+
+static var regex_char := RegEx.new()
+static var regex_char_pattern := ""
 
 
 
 static func tag_format(text: String) -> YapperTag:
-	return null
+	var tag = YapperTag.new()
+	
+	if text.contains(obold_pattern):
+		tag.type = YapperTagType.BOLD_OPEN
+	elif text.contains(cbold_pattern):
+		tag.type = YapperTagType.BOLD_CLOSE
+	elif text.contains(ounderline_pattern):
+		tag.type = YapperTagType.UNDERLINE_OPEN
+	elif text.contains(cunderline_pattern):
+		tag.type = YapperTagType.UNDERLINE_CLOSE
+	elif text.contains(ostrikethrough_pattern):
+		tag.type = YapperTagType.STRIKETHROUGH_OPEN
+	elif text.contains(cstrikethrough_pattern):
+		tag.type = YapperTagType.STRIKETHROUGH_CLOSE
+	elif text.contains(ocode_pattern):
+		tag.type = YapperTagType.CODE_OPEN
+	elif text.contains(ccode_pattern):
+		tag.type = YapperTagType.CODE_CLOSE
+	elif text.contains(ocenter_pattern):
+		tag.type = YapperTagType.CENTER_OPEN
+	elif text.contains(ccenter_pattern):
+		tag.type = YapperTagType.CENTER_CLOSE
+	elif text.contains(oleft_pattern):
+		tag.type = YapperTagType.LEFT_OPEN
+	elif text.contains(cleft_pattern):
+		tag.type = YapperTagType.LEFT_CLOSE
+	elif text.contains(oright_pattern):
+		tag.type = YapperTagType.RIGHT_OPEN
+	elif text.contains(cright_pattern):
+		tag.type = YapperTagType.RIGHT_CLOSE
+	elif text.contains(ofill_pattern):
+		tag.type = YapperTagType.FILL_OPEN
+	elif text.contains(cfill_pattern):
+		tag.type = YapperTagType.FILL_CLOSE
+	elif text.contains(oindent_pattern):
+		tag.type = YapperTagType.INDENT_OPEN
+	elif text.contains(cindent_pattern):
+		tag.type = YapperTagType.INDENT_CLOSE
+	
+	return tag
+
+static func text_tag(text: String) -> YapperTag:
+	var tag = YapperTag.new()
+	
+	tag.type = YapperTagType.TEXT
+	tag.content = text
+	
+	return tag

@@ -7,6 +7,8 @@ extends Node3D
 
 @export var enable_formatting : bool = false
 
+@export var billboard : BaseMaterial3D.BillboardMode = BaseMaterial3D.BillboardMode.BILLBOARD_DISABLED
+
 ## From start to end, how many characters are hidden.[br][b][code]0[/code] means none is hidden.[/b]
 @export_range(0, 100000, 1, "or_greater", "suffix:index") var hide_start : int = 0
 
@@ -16,9 +18,10 @@ extends Node3D
 ## When letters scatter, what should they collide with?
 @export_flags_3d_physics var collision_mask = 0
 
-@export var billboard : BaseMaterial3D.BillboardMode = BaseMaterial3D.BillboardMode.BILLBOARD_DISABLED
 
 
+var chars := Node3D.new()
+var formatted : Array = []
 
 ## Only the portion of text that is rendered.
 var rendered_text : String : set = _set_rendered_text
@@ -33,9 +36,9 @@ static var regex_tag_open_pattern := "\\[[a-zA-Z0-9]+[=]?[^\\[\\]]*\\]"
 static var regex_tag_close := RegEx.new()
 static var regex_tag_close_pattern := "\\[\\/[a-zA-Z0-9]+\\]"
 
-var test : String = "Lorem ipsum dolor sit amet, [b]consectetur adipiscing elit[/b], [char=uf6e3]sed do eiusmod tempor incididunt ut labore [font otv=\"wght=200,wdth=400\"]et dolore magna aliqua[/font]. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit [ashit][thefuck]in [color=#FFFFFF88]voluptate[/color] velit esse cillum dolore [pulse freq=1.0 color=#ffffff40 ease=-2.0]eu fugiat nulla pariatur.[/pulse] Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
 const VERY_GOOD_VERY_COOL_RENTXT_PRFIX : String = ",?)"
+
+var test : String = "Lorem ipsum dolor sit amet, [b]consectetur adipiscing elit[/b], [char=uf6e3]sed do eiusmod tempor incididunt ut labore [font otv=\"wght=200,wdth=400\"]et dolore magna aliqua[/font]. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit [ashit][thefuck]in [color=#FFFFFF88]voluptate[/color] velit esse cillum dolore [pulse freq=1.0 color=#ffffff40 ease=-2.0]eu fugiat nulla pariatur.[/pulse] Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 
 
@@ -44,13 +47,20 @@ func _enter_tree() -> void:
 	regex_tag_open.compile(regex_tag_open_pattern)
 	regex_tag_close.compile(regex_tag_close_pattern)
 	
-	get_formatted()
+	chars.name = &"Chars"
+	add_child(chars)
+	
+	format()
+	print(formatted)
+	
+	#for child in get_children(true):
+		#print(child.name)
 
 
 
 ## Try to run as little as possible.
-func get_formatted() -> Array[YapperTag]:
-	var full_text : String = test
+func format() -> void:
+	var full_text : String = text
 	
 	var onext : RegExMatch = regex_tag_open.search(full_text) ## Next opening tag.
 	var cnext : RegExMatch = regex_tag_close.search(full_text) ## Next closing tag.
@@ -108,39 +118,43 @@ func get_formatted() -> Array[YapperTag]:
 	
 	rendered_text = VERY_GOOD_VERY_COOL_RENTXT_PRFIX + full_text
 	
-	print()
-	print(full_text)
-	print()
-	print(tags)
-	print()
-	
-	var formatted : Array = []
+	formatted = []
 	
 	var keys = tags.keys()
 	var last_index : int = 0
 	
+	# append to "formatted", convert tag text to object.
 	for key in keys:
 		# scan before, add text.
-		formatted.append(full_text.substr(last_index, key))
+		formatted.append(YapperTag.text_tag(full_text.substr(last_index, key)))
 		
 		last_index = key
 		
 		for tag in tags[key]:
 			formatted.append(_get_tag_from_text(tag))
 	
-	if keys:
-		# scan last portion of the text.
-		formatted.append(full_text.substr(last_index))
-		print(keys[-1])
+	# scan last portion of the text.
+	formatted.append(YapperTag.text_tag(full_text.substr(last_index)))
 	
-	print(formatted)
-	
-	return []
+	create_characters()
 
 func _get_tag_from_text(string: String) -> YapperTag:
 	var opening = string.begins_with("o")
 	
-	return null
+	return YapperTag.tag_format(string)
+
+func create_characters() -> void:
+	for child in chars.get_children():
+		chars.remove_child(child)
+	
+	for tag in formatted:
+		if tag.type != YapperTag.YapperTagType.TEXT:
+			continue
+		
+		for i in tag.content:
+			var label = Label3D.new()
+			label.text = i
+			chars.add_child(label)
 
 
 
@@ -148,6 +162,7 @@ func _get_tag_from_text(string: String) -> YapperTag:
 
 func _set_text(val: String) -> void:
 	text = val
+	format()
 
 func _set_rendered_text(val: String) -> void:
 	if val.begins_with(VERY_GOOD_VERY_COOL_RENTXT_PRFIX):
